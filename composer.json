@@ -1,0 +1,19 @@
+{
+    "name": "calderawp/swp-api-route",
+    "description": "Adds an endpoint to the WordPress REST API for searching via SearchWP.",
+    "keywords" : [ "wordpress", "wp-api", "wp-json-api", "searchwp" ],
+    "type": "wordpress-plugin",
+    "license": "gplv2+",
+    "authors": [
+        {
+            "name": "Josh Pollock",
+            "email": "Josh@CalderaWP.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {"calderawp\\swp_api\\": ""}
+    }
+
+}
