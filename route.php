@@ -116,8 +116,7 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_engine( $engine ){
-		//@todo this
-		return true;
+		return SWP()->is_valid_engine( $engine );
 	}
 
 
