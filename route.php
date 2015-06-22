@@ -54,24 +54,20 @@ class route extends \WP_REST_Posts_Controller {
 						'sanitize_callback' => 'absint',
 					),
 					'post__in' => array(
-						'default' => array(),
+						'default' => false,
 						'sanitize_callback' => 'absint',
 					),
 					'post__not_in' => array(
-						'default' => array(),
+						'default' => false,
 						'sanitize_callback' => '',
 					),
 					'tax_query' => array(
-						'default' => array(),
+						'default' => false,
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_tax_query' ),
 					),
 					'meta_query' => array(
-						'default' => array(
-							'key' => '',
-							'value' => '',
-							'compare' => '',
-						),
+						'default' => false,
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_meta_query' ),
 					),
@@ -162,6 +158,11 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_meta_query( $query ) {
+		if ( ! is_array( $query ) ) {
+			return array();
+
+		}
+
 		$required_keys = array(
 			'key',
 			'value',
@@ -184,6 +185,11 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_tax_query( $query ) {
+		if ( ! is_array( $query ) ) {
+			return array();
+
+		}
+
 		$required_keys = array(
 			'taxonomy',
 			'field',
@@ -205,6 +211,10 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_date_query( $query ) {
+		if ( ! is_array( $query ) ) {
+			return array();
+
+		}
 		$required_keys = array(
 			'year',
 			'month',
