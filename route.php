@@ -62,16 +62,12 @@ class route extends \WP_REST_Posts_Controller {
 						'sanitize_callback' => '',
 					),
 					'tax_query' => array(
-						'default' => array(),
+						'default' => null,
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_tax_query' ),
 					),
 					'meta_query' => array(
-						'default' => array(
-							'key' => '',
-							'value' => '',
-							'compare' => '',
-						),
+						'default' => null,
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_meta_query' ),
 					),
