@@ -71,7 +71,8 @@ class route extends \WP_REST_Posts_Controller {
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_meta_query' ),
 					),
-				)
+				),
+				'permission_callback' => array( $this, 'permissions_check' )
 			)
 		);
 
@@ -244,6 +245,30 @@ class route extends \WP_REST_Posts_Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Permissions check.
+	 *
+	 * Hardcoded to allow, with filter to change.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return boolean
+	 */
+	protected function permissions_check( $request ) {
+		/**
+		 * Overide public nature of endpoint.
+		 *
+		 * @since 0.1.0
+		 *
+		 * @param bool $allowed. If true, request is allowed. Change to false to prevent.
+		 */
+		$allowed = apply_filters( 'cwp_swp_api_allow_query', true, $request );
+		return (bool) $allowed;
+
 	}
 
 }

@@ -35,4 +35,5 @@ function cwp_swp_api_boot(){
 		$api = new calderawp\swp_api\route( 'post' );
 		$api->the_route();
 	}
+
 }
