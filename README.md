@@ -1,3 +1,5 @@
+![Banner](https://calderawp.com/wp-content/uploads/2015/06/WPORG_SearchWP.png)
+
 SearchWP API
 ============
 
