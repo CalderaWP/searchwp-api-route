@@ -1,7 +1,9 @@
 SearchWP API
 ============
 
-Adds an endpoint to the WordPress REST API for searching via SearchWP.
+Adds an endpoint to the WordPress REST API for searching via [SearchWP](https://searchwp.com/?ref=121) -- the best tool for improving the usefulness and performance of WordPress search.
+
+This plugin is a free plugin by [CalderaWP](https://CalderaWP.com). It is not an official add-on for SearchWP and is no way associated with SearchWP or the National Football League.
 
 * Requires WordPress REST API (WP-API) 2.0-beta2 or later.
 * Requires SearchWP Version 2.6 or later
