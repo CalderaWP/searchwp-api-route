@@ -38,16 +38,15 @@ class route extends \WP_REST_Posts_Controller {
 					),
 					'posts_per_page' => array(
 						'default' => get_option( 'posts_per_page', 15 ),
-						'sanitize_callback' => 'absint',
-						'validate_callback' => array( $this, 'limit_posts_per_page')
+						'sanitize_callback' => array( $this, 'limit_posts_per_page')
 					),
 					'nopaging' => array(
 						'default' => 0,
-						'sanitize_callback' => 'absint',
+						'sanitize_callback' => array( $this, 'sanatize_bool' ),
 					),
 					'load_posts' => array(
 						'default' => 1,
-						'sanitize_callback' => 'absint',
+						'sanitize_callback' => array( $this, 'sanatize_bool' ),
 					),
 					'page' => array(
 						'default' => 1,
@@ -55,11 +54,11 @@ class route extends \WP_REST_Posts_Controller {
 					),
 					'post__in' => array(
 						'default' => false,
-						'sanitize_callback' => 'absint',
+						'sanitize_callback' => array( $this, 'comma_arg' )
 					),
 					'post__not_in' => array(
 						'default' => false,
-						'sanitize_callback' => '',
+						'sanitize_callback' => array( $this, 'comma_arg' )
 					),
 					'tax_query' => array(
 						'default' => false,
@@ -118,7 +117,13 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_engine( $engine ){
-		return SWP()->is_valid_engine( $engine );
+		if (  ! SWP()->is_valid_engine( $engine ) ) {
+			return new \WP_Error( 'swp-api-invalid-search-engine', __( 'Invalid search engine', 'cwp-searchwp-api' ) );
+
+		}
+
+		return $engine;
+
 	}
 
 
@@ -132,11 +137,13 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return int
 	 */
 	public function limit_posts_per_page( $posts_per_page ) {
+		$posts_per_page = absint( $posts_per_page );
 		if ( $posts_per_page > 50  ) {
 			$posts_per_page = 50;
 		}
 
 		return $posts_per_page;
+
 	}
 
 	/**
@@ -263,7 +270,7 @@ class route extends \WP_REST_Posts_Controller {
 	 *
 	 * @return boolean
 	 */
-	protected function permissions_check( $request ) {
+	public function permissions_check( $request ) {
 		/**
 		 * Overide public nature of endpoint.
 		 *
@@ -273,6 +280,51 @@ class route extends \WP_REST_Posts_Controller {
 		 */
 		$allowed = apply_filters( 'cwp_swp_api_allow_query', true, $request );
 		return (bool) $allowed;
+
+	}
+
+	/**
+	 * Ensure a possible boolean is a boolean and convert to an actual boolean
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param mixed $maybe_bool Value to check.
+	 *
+	 * @return bool
+	 */
+	public function sanatize_bool( $maybe_bool ) {
+		if ( is_int( $maybe_bool ) || is_string( $maybe_bool ) || is_bool( $maybe_bool ) ) {
+
+			if ( filter_var( $maybe_bool, FILTER_VALIDATE_BOOLEAN ) ) {
+				return (bool) $maybe_bool;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Convert a possibly comma-seperated argument to an array
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param string $arg
+	 *
+	 * @return array
+	 */
+	public function comma_arg( $arg ) {
+
+		if ( strpos( $arg, ',' ) ) {
+			return explode( ',', $arg );
+		}elseif ( 0 < absint( $arg ) ) {
+			return array( $arg );
+		}else{
+			return $arg;
+		}
+
 
 	}
 
