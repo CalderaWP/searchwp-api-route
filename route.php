@@ -71,6 +71,11 @@ class route extends \WP_REST_Posts_Controller {
 						'sanitize_callback' => array( $this, 'sanatize_array'),
 						'validate_callback' => array( $this, 'validate_meta_query' ),
 					),
+					'date_query' => array(
+						'default' => false,
+						'sanitize_callback' => array( $this, 'sanatize_array'),
+						'validate_callback' => array( $this, 'validate_date_query' ),
+					),
 				),
 				'permission_callback' => array( $this, 'permissions_check' )
 			)
