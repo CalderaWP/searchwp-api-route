@@ -1,13 +1,15 @@
 <?php
 
-class CWP_SWP_API_Tests extends WP_UnitTestCase {
+namespace calderawp\swp_api\tests;
+
+class the_tests extends \WP_UnitTestCase {
 
 	public function setUp() {
 		parent::setUp();
 
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
-		$this->server = $wp_rest_server = new WP_REST_Server;
+		$this->server = $wp_rest_server = new \WP_REST_Server;
 		do_action( 'rest_api_init' );
 
 
@@ -21,6 +23,10 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 
 	/**
 	 * Test that our tests work
+	 *
+	 * @since 0.2.0
+	 *
+	 * @covers josh
 	 */
 	public function test_tests() {
 		$this->assertTrue( true );
@@ -38,7 +44,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 		$routes = $this->server->get_routes();
 
 
-		$this->assertArrayHasKey( $this->route, $routes );
+		$this->assertArrayHasKey( '/swp_api/search', $routes );
 
 	}
 
@@ -51,7 +57,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_s() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => 'one',
 		) );
@@ -77,7 +83,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_engine_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => 'hats',
 		) );
@@ -105,7 +111,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::validate_engine()
 	 */
 	public function test_engine_validation() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => 'hats',
 			'engine'      => 'notreal'
@@ -132,7 +138,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_posts_per_page() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'posts_per_page'           => 7,
 		) );
@@ -159,7 +165,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::limit_posts_per_page()
 	 */
 	public function test_posts_per_page_limit() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'posts_per_page'           => 57,
 		) );
@@ -199,7 +205,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 		//make sure invalid input returns false
 		$this->assertFalse( $class->sanatize_bool( 3 ) );
 		$this->assertFalse( $class->sanatize_bool( 'hats' ) );
-		$this->assertFalse( $class->sanatize_bool( new stdClass() ) );
+		$this->assertFalse( $class->sanatize_bool( new \stdClass() ) );
 		$this->assertFalse( $class->sanatize_bool( array() ) );
 
 	}
@@ -214,7 +220,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::sanatize_bool()
 	 */
 	public function test_nopaging() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'nopaging'           => "true",
 		) );
@@ -240,7 +246,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_nopaging_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => "Gandalf",
 		) );
@@ -267,7 +273,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::sanatize_bool()
 	 */
 	public function test_load_posts() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'load_posts'           => "false",
 		) );
@@ -293,7 +299,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_load_posts_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => "Bilbo",
 		) );
@@ -319,7 +325,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_page() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'page'           => "5",
 		) );
@@ -345,7 +351,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_load_page_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => "Sam",
 		) );
@@ -390,7 +396,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::comma_arg()
 	 */
 	public function test_post__in_single() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'post__in'           => "5",
 		) );
@@ -417,7 +423,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::comma_arg()
 	 */
 	public function test_post__in_array() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'post__in'           => "5,9",
 		) );
@@ -444,7 +450,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::comma_arg()
 	 */
 	public function test_post__in_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => "Sam",
 		) );
@@ -472,7 +478,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 */
 	public function test_post__not_in_single() {
 		return;
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'post__in'           => "5",
 		) );
@@ -499,7 +505,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::comma_arg()
 	 */
 	public function test_post__not_in_array() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'post__not_in'           => "5,9",
 		) );
@@ -526,7 +532,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::comma_arg()
 	 */
 	public function test_post__not_in_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's'           => "Merry",
 		) );
@@ -671,7 +677,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::validate_tax_query()
 	 */
 	public function test_tax_query() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'tax_query'           => array(
 				'taxonomy' => 1,
@@ -710,7 +716,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_tax_query_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's' => 'Boromir'
 		) );
@@ -736,7 +742,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::validate_meta_query()
 	 */
 	public function test_meta_query() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'meta_query'           => array(
 				'key' => 1,
@@ -775,7 +781,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::the_search()
 	 */
 	public function test_meta_query_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's' => 'Legolas'
 		) );
@@ -801,7 +807,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 	 * @covers \calderawp\swp_api\route::validate_date_query()
 	 */
 	public function test_date_query() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			'date_query'           => array(
 				'year' => 1,
@@ -841,7 +847,7 @@ class CWP_SWP_API_Tests extends WP_UnitTestCase {
 
 	 */
 	public function test_date_default() {
-		$request = new WP_REST_Request( 'GET', '/swp_api/search' );
+		$request = new \WP_REST_Request( 'GET', '/swp_api/search' );
 		$request->set_query_params( array(
 			's' => 'Elrond'
 		) );
