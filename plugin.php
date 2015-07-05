@@ -3,7 +3,7 @@
  * Plugin Name: SearchWP API
  * Plugin URI:  http://CalderaWP.com
  * Description: Adds an endpoint to the WordPress REST API for searching via SearchWP
- * Version:     0.1.0
+ * Version:     0.2.0
  * Author:      Josh Pollock for CalderaWP LLC <Josh@CalderaWP.com> for CalderaWP LLC
  * Author URI:  https://CalderaWP.com
  * License:     GPL-2.0+
