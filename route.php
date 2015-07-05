@@ -26,62 +26,81 @@ class route extends \WP_REST_Posts_Controller {
 			array(
 				'methods'         => \WP_REST_Server::READABLE,
 				'callback'        => array( $this, 'the_search' ),
-				'args' =>   array(
-					's' => array(
-						'default' => '',
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'engine' => array(
-						'default' => 'default',
-						'sanitize_callback' => 'sanitize_text_field',
-						'validate_callback' => array( $this, 'validate_engine' ),
-					),
-					'posts_per_page' => array(
-						'default' => get_option( 'posts_per_page', 15 ),
-						'sanitize_callback' => array( $this, 'limit_posts_per_page')
-					),
-					'nopaging' => array(
-						'default' => 0,
-						'sanitize_callback' => array( $this, 'sanatize_bool' ),
-					),
-					'load_posts' => array(
-						'default' => 1,
-						'sanitize_callback' => array( $this, 'sanatize_bool' ),
-					),
-					'page' => array(
-						'default' => 1,
-						'sanitize_callback' => 'absint',
-					),
-					'post__in' => array(
-						'default' => false,
-						'sanitize_callback' => array( $this, 'comma_arg' )
-					),
-					'post__not_in' => array(
-						'default' => false,
-						'sanitize_callback' => array( $this, 'comma_arg' )
-					),
-					'tax_query' => array(
-						'default' => false,
-						'sanitize_callback' => array( $this, 'sanatize_array'),
-						'validate_callback' => array( $this, 'validate_tax_query' ),
-					),
-					'meta_query' => array(
-						'default' => false,
-						'sanitize_callback' => array( $this, 'sanatize_array'),
-						'validate_callback' => array( $this, 'validate_meta_query' ),
-					),
-					'date_query' => array(
-						'default' => false,
-						'sanitize_callback' => array( $this, 'sanatize_array'),
-						'validate_callback' => array( $this, 'validate_date_query' ),
-					),
-				),
+				'args' =>   $this->the_args(),
 				'permission_callback' => array( $this, 'permissions_check' )
 			)
 		);
 
 	}
 
+	/**
+	 * Prepare arguments for the swp_api endpoint of this route.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return array
+	 */
+	protected function the_args() {
+		$args = array( 's' => array(
+				'default' => '',
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+			'engine' => array(
+				'default' => 'default',
+				'sanitize_callback' => 'sanitize_text_field',
+				'validate_callback' => array( $this, 'validate_engine' ),
+			),
+			'posts_per_page' => array(
+				'default' => get_option( 'posts_per_page', 15 ),
+				'sanitize_callback' => array( $this, 'limit_posts_per_page')
+			),
+			'nopaging' => array(
+				'default' => 0,
+				'sanitize_callback' => array( $this, 'sanatize_bool' ),
+			),
+			'load_posts' => array(
+				'default' => 1,
+				'sanitize_callback' => array( $this, 'sanatize_bool' ),
+			),
+			'page' => array(
+				'default' => 1,
+				'sanitize_callback' => 'absint',
+			),
+			'post__in' => array(
+				'default' => false,
+				'sanitize_callback' => array( $this, 'comma_arg' )
+			),
+			'post__not_in' => array(
+				'default' => false,
+				'sanitize_callback' => array( $this, 'comma_arg' )
+			),
+			'tax_query' => array(
+				'default' => false,
+				'sanitize_callback' => array( $this, 'sanatize_array'),
+				'validate_callback' => array( $this, 'validate_tax_query' ),
+			),
+			'meta_query' => array(
+				'default' => false,
+				'sanitize_callback' => array( $this, 'sanatize_array'),
+				'validate_callback' => array( $this, 'validate_meta_query' ),
+			),
+			'date_query' => array(
+				'default' => false,
+				'sanitize_callback' => array( $this, 'sanatize_array'),
+				'validate_callback' => array( $this, 'validate_date_query' ),
+			),
+		);
+
+		/**
+		 * Filter args for endpoint
+		 *
+		 * @since 0.3.0
+		 *
+		 * @param array $args Array of args to be passed as $args argument of register_rest_route()
+		 */
+		return apply_filters( 'cwp_swp_api_args', $args );
+
+	}
 	/**
 	 * Do search and respond.
 	 *
@@ -93,6 +112,14 @@ class route extends \WP_REST_Posts_Controller {
 	 */
 	public function the_search( $request ) {
 		$args = (array) $request->get_params();
+		$allowed = array_keys( $this->the_args() );
+		$allowed = array_flip( $allowed );
+		foreach( $args as $key => $value ) {
+			if ( ! isset( $allowed[ $key ] ) ) {
+				unset( $args[ $key ] );
+			}
+
+		}
 
 		$search = new \SWP_Query( $args );
 		$query_result = $search->posts;
