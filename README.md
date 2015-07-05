@@ -11,6 +11,7 @@ This plugin is a free plugin by [CalderaWP](https://CalderaWP.com). It is not an
 * Requires SearchWP Version 2.6 or later
 
 ### Example Queries
+For a complete list of possible queries, see: [https://calderawp.com/doc/searchwp-api-queries/](https://calderawp.com/doc/searchwp-api-queries/)
 * `wp-json/swp_api/search?s=jedi&egnine=star-wars`
 * `wp-json/swp_api/search?&tax_query[field]=slug&tax_query[taxonomy]=categories&tax_query[terms]=1`
 * `wp-json/swp_api/search?meta_query[key]=jedi&meta_query[value]=luke&tax_query[compare]=IN`
