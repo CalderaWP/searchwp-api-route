@@ -155,7 +155,7 @@ class route extends \WP_REST_Posts_Controller {
 
 
 	/**
-	 * Cap posts_per_page at 50 to prevent huge requests functioning as DDOS.
+	 * Cap posts_per_page at 50 (or filter val) to prevent huge requests functioning as DDOS.
 	 *
 	 * @since 0.1.0
 	 *
@@ -165,8 +165,17 @@ class route extends \WP_REST_Posts_Controller {
 	 */
 	public function limit_posts_per_page( $posts_per_page ) {
 		$posts_per_page = absint( $posts_per_page );
-		if ( $posts_per_page > 50  ) {
-			$posts_per_page = 50;
+
+		/**
+		 * Change the maximum number of posts per page
+		 *
+		 * @since 0.3.0
+		 *
+		 * @param int $max Maximum posts per page.
+		 */
+		$max = apply_filters( 'cwp_swp_api_max_posts_per_page', 50 );
+		if ( $posts_per_page > (int) $max  ) {
+			$posts_per_page = $max;
 		}
 
 		return $posts_per_page;
