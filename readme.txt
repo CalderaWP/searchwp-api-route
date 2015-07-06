@@ -29,11 +29,13 @@ For a complete list of possible queries, see: [https://calderawp.com/doc/searchw
 * Install SearchWP, and the REST API plugin (you will need to get the \"develop\" branch from Github.)
 * Install this plugin.
 * Activate this plugin.
-* GET some queries going.
+* GET some queries.
+* Breath in.
+* Breath out.
 
 == Frequently Asked Questions ==
 === Does It Work With Version 1 of The REST API? ===
-No it does not.
+No, it does not.
 
 === I Installed It And Nothing Happened ===
 You are probably using version 1 of the REST API, or have not updated SearchWP past 2.6.
@@ -42,10 +44,10 @@ You are probably using version 1 of the REST API, or have not updated SearchWP p
 Very shiny.
 
 == Screenshots ==
-1. Example query response.
+
 
 == Changelog ==
-=== Version 1.0.0 ===
+=== Version 1.0.0 - July 6, 2015 ===
 Initial release
 
 == Upgrade Notice ==
