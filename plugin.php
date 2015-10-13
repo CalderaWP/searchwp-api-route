@@ -19,10 +19,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Boot it up.
  */
-add_action( 'init', function() {
-	include_once( dirname( __FILE__ ) . '/route.php' );
-	add_action( 'rest_api_init', 'cwp_swp_api_boot' );
-});
+add_action( 'rest_api_init', 'cwp_swp_api_boot', 25 );
 
 /**
  * Check dependencies and boot the API if possible.
@@ -32,7 +29,8 @@ add_action( 'init', function() {
  * @uses "rest_api_init"
  */
 function cwp_swp_api_boot(){
-	if ( class_exists( 'SWP_Query' ) && defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION,'2.0-beta2', '>=' ) ) {
+	if ( class_exists( 'SWP_Query' ) && defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION,'2.0', '>=' ) ) {
+		include_once( dirname( __FILE__ ) . '/route.php' );
 		$api = new calderawp\swp_api\route( 'post' );
 		$api->the_route();
 	}

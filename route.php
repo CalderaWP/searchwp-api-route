@@ -27,7 +27,7 @@ class route extends \WP_REST_Posts_Controller {
 				'methods'               => \WP_REST_Server::READABLE,
 				'permission_callback'   => array( $this, 'permissions_check' ),
 				'args'                  => $this->the_args(),
-				'callback'              => array( $this, 'callback' ),
+				'callback'              => array( $this, 'the_search' ),
 
 			)
 		);
@@ -121,6 +121,16 @@ class route extends \WP_REST_Posts_Controller {
 
 		}
 
+		/**
+		 * Filter query args before running query
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param array $args Query args
+		 * @param \WP_REST_Request $request Currnet rquest
+		 */
+		$args = apply_filters( 'cwp_swp_api_search_args', $args, $request );
+
 		$search = new \SWP_Query( $args );
 		$query_result = $search->posts;
 		$posts = array();
@@ -192,7 +202,23 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return array
 	 */
 	public function sanatize_array( $array ) {
-		$array = array_map( "strip_tags", $array );
+		if ( ! empty( $array ) ) {
+			array_walk( $array, function(&$n) {
+				if( is_null( $n ) ) {
+					$n = false;
+				}else{
+					if( is_array( $n ) ) {
+						foreach( $n as $key => $value ) {
+							$n[ $key ] = trim( strip_tags( stripslashes( $value ) ) );
+						}
+					}else{
+						$n = trim( strip_tags( stripslashes( $n ) ) );
+					}
+
+				}
+			});
+		}
+
 		return $array;
 
 	}
@@ -203,19 +229,69 @@ class route extends \WP_REST_Posts_Controller {
 	 * @since 0.1.0
 	 *
 	 * @param array $query
-	 *
+	 * @param \WP_REST_Request $request
 	 * @return bool
 	 */
-	public function validate_meta_query( $query ) {
+	public function validate_meta_query( $query, $request ) {
 		if ( ! is_array( $query ) ) {
 			return array();
+
+		}
+
+		$meta_query = $request->get_param( 'meta_query' );
+		if( isset( $_GET[ 'meta_query' ] ) && is_array( $_GET[ 'meta_query' ] ) && isset( $_GET[ 'meta_query' ][ 'key' ], $_GET[ 'meta_query' ][ 'value' ] ) && is_array( $_GET[ 'meta_query' ][ 'key' ] ) ) {
+			if( ! isset( $_GET[ 'meta_relation' ] ) ) {
+				$_GET[ 'meta_relation' ] = 'AND';
+			}
+
+			$meta_query = array(
+				'relation' => strip_tags( $_GET[ 'meta_relation' ] ),
+
+			);
+
+
+			foreach( $_GET[ 'meta_query' ][ 'key' ] as $i => $key ) {
+				if( isset( $_GET[ 'meta_query' ][ 'value' ][ $i ] ) ) {
+					if( ! isset( $_GET[ 'meta_query' ][ 'compare' ][ $i ] ) ) {
+						$_GET[ 'meta_query' ][ 'compare' ][ $i ] = 'IN';
+					}
+
+					if( is_array( $_GET[ 'meta_query' ][ 'value' ] [ $i ] ) ) {
+						$value = array();
+						foreach($_GET[ 'meta_query' ][ 'value' ] [ $i ] as $_value  ) {
+							$value[] = strip_tags( $_value );
+						}
+					}else{
+						$value = strip_tags( $_GET[ 'meta_query' ][ 'value' ] [ $i ] );
+					}
+
+					$meta_query[] = array(
+						'key' => strip_tags( $key ),
+						'value' => $value,
+						'compare' => strip_tags( strtoupper( $_GET['meta_query']['compare'][ $i ] ) )
+					);
+				}
+
+			}
+
+			if( isset( $meta_query[ 'key' ] ) ){
+				unset( $meta_query[ 'key' ] );
+			}
+
+			if( isset( $meta_query[ 'value' ] ) ){
+				unset( $meta_query[ 'value' ] );
+			}
+
+			$request->set_param( 'meta_query', $meta_query );
+
+			return true;
+
 
 		}
 
 		$required_keys = array(
 			'key',
 			'value',
-			'compare'
 		);
 
 		$valid = $this->validate_query_keys( $query, $required_keys );

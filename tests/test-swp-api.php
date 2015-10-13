@@ -604,13 +604,14 @@ class the_tests extends \WP_UnitTestCase {
 			'compare' => 'OR'
 		);
 
-		$this->assertTrue( $class->validate_meta_query( $query ) );
+
+		$this->assertTrue( $class->validate_meta_query( $query, new \WP_REST_Request()  ) );
 
 		$query = array(
 			'value' => 'pippin',
 			'compare' => 'OR'
 		);
-		$this->assertFalse( $class->validate_meta_query( $query ) );
+		$this->assertFalse( $class->validate_meta_query( $query, new \WP_REST_Request() ) );
 
 
 	}
