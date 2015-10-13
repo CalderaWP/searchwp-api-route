@@ -24,13 +24,13 @@ class route extends \WP_REST_Posts_Controller {
 	public function the_route() {
 		register_rest_route( 'swp_api', '/search',
 			array(
-				'methods'         => \WP_REST_Server::READABLE,
-				'callback'        => array( $this, 'the_search' ),
-				'args' =>   $this->the_args(),
-				'permission_callback' => array( $this, 'permissions_check' )
+				'methods'               => \WP_REST_Server::READABLE,
+				'permission_callback'   => array( $this, 'permissions_check' ),
+				'args'                  => $this->the_args(),
+				'callback'              => array( $this, 'callback' ),
+
 			)
 		);
-
 	}
 
 	/**
