@@ -139,8 +139,15 @@ class route extends \WP_REST_Posts_Controller {
 		 */
 		$args = apply_filters( 'cwp_swp_api_search_args', $args, $request );
 
-		$search = new \SWP_Query( $args );
+
+		if ( ! empty( $args[ 's' ] ) &&  class_exists( "SWP_Query" ) ) {
+			$search = new \SWP_Query( $args );
+		}else{
+			$search = new \WP_Query( $args );
+		}
+
 		$query_result = $search->posts;
+
 		$posts = array();
 		foreach ( $query_result as $post ) {
 			$data = $this->prepare_item_for_response( $post, $request );
