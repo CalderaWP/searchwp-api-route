@@ -121,6 +121,14 @@ class route extends \WP_REST_Posts_Controller {
 
 		}
 
+		if( ! empty( $args[ 'meta_query' ] ) ) {
+			$args[ 'meta_query' ] = array( $args[ 'meta_query' ] );
+		}
+
+		if( ! empty( $args[ 'tax_query' ] ) ) {
+			$args[ 'tax_query' ] = array( $args[ 'tax_query' ] );
+		}
+
 		/**
 		 * Filter query args before running query
 		 *
