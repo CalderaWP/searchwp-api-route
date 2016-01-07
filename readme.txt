@@ -2,8 +2,8 @@
 Contributors: Shelob9
 Tags: search, rest-api, wp-api, json, searchwp, calderawp
 Donate link: https://CalderaWP.com
-Requires at least: 4.2
-Tested up to: 4.2
+Requires at least: 4.3.1
+Tested up to: 4.4
 Stable tag: 1.0.0
 License: GPL version 2 or later
 
@@ -16,8 +16,10 @@ Adds an endpoint to the WordPress REST API for searching via [SearchWP](https://
 
 This plugin is a free plugin by [CalderaWP](https://CalderaWP.com). It is not an official add-on for SearchWP.
 
-* Requires WordPress REST API (WP-API) 2.0-beta2 or later.
+* Requires WordPress REST API (WP-API) 2.0-beta9 or later or WordPress 4.4 or later.
 * Requires SearchWP Version 2.6 or later
+
+Technically will work without SearchWP, but queries will run through WP_Query.
 
 === Example Queries ===
 For a complete list of possible queries, see: [https://calderawp.com/doc/searchwp-api-queries/](https://calderawp.com/doc/searchwp-api-queries/)
@@ -47,6 +49,10 @@ Very shiny.
 
 
 == Changelog ==
+=== Version 1.1.0 - January, 2015 ===
+* Complex meta queries
+* Fallback to WP_Query if not possible to use SearchWP
+
 === Version 1.0.0 - July 6, 2015 ===
 Initial release
 
