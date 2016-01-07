@@ -4,7 +4,7 @@ Tags: search, rest-api, wp-api, json, searchwp, calderawp
 Donate link: https://CalderaWP.com
 Requires at least: 4.3.1
 Tested up to: 4.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL version 2 or later
 
 Run advanced searches via the WordPress REST API and SearchWP.
