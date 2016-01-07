@@ -169,7 +169,7 @@ class route extends \WP_REST_Posts_Controller {
 	 * @return bool
 	 */
 	public function validate_engine( $engine ){
-		if (  ! SWP()->is_valid_engine( $engine ) ) {
+		if ( class_exists( 'SWP' ) && ! SWP()->is_valid_engine( $engine ) ) {
 			return new \WP_Error( 'swp-api-invalid-search-engine', __( 'Invalid search engine', 'cwp-searchwp-api' ) );
 
 		}

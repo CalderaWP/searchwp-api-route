@@ -29,7 +29,7 @@ add_action( 'rest_api_init', 'cwp_swp_api_boot', 25 );
  * @uses "rest_api_init"
  */
 function cwp_swp_api_boot(){
-	if ( class_exists( 'SWP_Query' ) && defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION,'2.0', '>=' ) ) {
+	if ( defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION,'2.0', '>=' ) ) {
 		include_once( dirname( __FILE__ ) . '/route.php' );
 		$api = new calderawp\swp_api\route( 'post' );
 		$api->the_route();
