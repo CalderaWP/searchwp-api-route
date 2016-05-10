@@ -14,9 +14,14 @@ Technically will work without SearchWP, but queries will run through WP_Query.
 
 ### Example Queries
 For a complete list of possible queries, see: [https://calderawp.com/doc/searchwp-api-queries/](https://calderawp.com/doc/searchwp-api-queries/)
-* `wp-json/swp_api/search?s=jedi&egnine=star-wars`
+* `wp-json/swp_api/search?s=jedi&engine=star-wars`
 * `wp-json/swp_api/search?&tax_query[field]=slug&tax_query[taxonomy]=categories&tax_query[terms]=1`
 * `wp-json/swp_api/search?meta_query[key]=jedi&meta_query[value]=luke&tax_query[compare]=IN`
+
+### Other Post Types
+* Added in version 1.2.0
+By default query is against posts, to query against the post type "jedi" use:
+* * `wp-json/swp_api/search?s=rey&post_type=jedi`
 
 ### Multiple Meta Queries
 Nested meta queries added in version 1.1.0 and allow for querying by multiple meta fields. Be sure to see the [relevant section of the WP_Query docs](https://codex.wordpress.org/Class_Reference/WP_Query#Custom_Field_Parameters)
