@@ -50,6 +50,11 @@ class route extends \WP_REST_Posts_Controller {
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => array( $this, 'validate_engine' ),
 			),
+			'post_type' => array(
+			   'default'           => 'post',
+			   'sanitize_callback' => 'sanitize_text_field',
+			   'validate_callback' => array( $this, 'validate_post_type' ),
+			),
 			'posts_per_page' => array(
 				'default' => get_option( 'posts_per_page', 15 ),
 				'sanitize_callback' => array( $this, 'limit_posts_per_page')
@@ -176,6 +181,24 @@ class route extends \WP_REST_Posts_Controller {
 
 		return $engine;
 
+	}
+
+	/**
+	 * Ensure that this engine exists.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param string $post_type
+	 *
+	 * @return string|WP_Error
+	 */
+	public function validate_post_type( $post_type ){
+		$post_types = get_post_types( array(), 'names' );
+		if( in_array( $post_type, $post_types ) ){
+			return $post_type;
+		}
+
+		return new \WP_Error( 'swp-api-invalid-post-type', __( 'Invalid post type', 'cwp-searchwp-api' ) );
 	}
 
 
