@@ -155,7 +155,11 @@ class route extends \WP_REST_Posts_Controller {
 
 		$posts = array();
 		foreach ( $query_result as $post ) {
-			$data = $this->prepare_item_for_response( $post, $request );
+			$data = false;
+			$data = apply_filters( 'cwp_swp_api_prepare_item_for_response', $data, $post, $request );
+			if ( empty ( $data ) ) {
+				$data = $this->prepare_item_for_response( $post, $request );
+			}
 			$posts[] = $this->prepare_response_for_collection( $data );
 		}
 
