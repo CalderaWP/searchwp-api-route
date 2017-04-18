@@ -164,6 +164,8 @@ class route extends \WP_REST_Posts_Controller {
 		}
 
 		$response = rest_ensure_response( $posts );
+		$response->header( 'X-WP-Total', (int) $search->found_posts );
+		$response->header( 'X-WP-TotalPages', (int) $search->max_num_pages );
 
 		return $response;
 	}
