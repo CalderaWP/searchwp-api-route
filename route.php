@@ -151,7 +151,7 @@ class route extends \WP_REST_Posts_Controller {
 			$search = new \WP_Query( $args );
 		}
 
-		$query_result = $search->posts;
+		$query_result = empty($search->posts) ? array() : $search->posts;
 
 		$posts = array();
 		foreach ( $query_result as $post ) {
